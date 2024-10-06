@@ -56,7 +56,7 @@ The first command will build the source of your application. The second command 
 Build your application by using the `sam build` command.
 
 ```bash
-my-application$ sam build
+sam build
 ```
 
 The AWS SAM CLI installs dependencies that are defined in `package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
@@ -66,7 +66,7 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-my-application$ sam local invoke helloFromLambdaFunction --no-event
+sam local invoke AppFunction --no-event
 ```
 
 ## Add a resource to your application
@@ -79,10 +79,10 @@ Update `template.yaml` to add a dead-letter queue to your application. In the **
 Resources:
   MyQueue:
     Type: AWS::SQS::Queue
-  helloFromLambdaFunction:
+  AppFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/handlers/hello-from-lambda.helloFromLambdaHandler
+      Handler: src/handlers/app.handler
       Runtime: nodejs20.x
       DeadLetterQueue:
         Type: SQS
@@ -97,7 +97,7 @@ The dead-letter queue is a location for Lambda to send events that could not be 
 Deploy the updated application.
 
 ```bash
-my-application$ sam deploy
+sam deploy
 ```
 
 Open the [**Applications**](https://console.aws.amazon.com/lambda/home#/applications) page of the Lambda console, and choose your application. When the deployment completes, view the application resources on the **Overview** tab to see the new resource. Then, choose the function to see the updated configuration that specifies the dead-letter queue.
@@ -109,7 +109,7 @@ To simplify troubleshooting, the AWS SAM CLI has a command called `sam logs`. `s
 **NOTE:** This command works for all Lambda functions, not just the ones you deploy using AWS SAM.
 
 ```bash
-my-application$ sam logs -n helloFromLambdaFunction --stack-name sam-app --tail
+sam logs -n AppFunction --stack-name ts-sam-standalone --tail
 ```
 
 **NOTE:** This uses the logical name of the function within the stack. This is the correct name to use when searching logs inside an AWS Lambda function within a CloudFormation stack, even if the deployed function name varies due to CloudFormation's unique resource name generation.
@@ -121,8 +121,8 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `__tests__` folder in this project. Use `npm` to install the [Jest test framework](https://jestjs.io/) and run unit tests.
 
 ```bash
-my-application$ npm install
-my-application$ npm run test
+npm install
+npm run test
 ```
 
 ## Cleanup
