@@ -3,7 +3,7 @@
 version = 0.1
 
 [default.global.parameters]
-stack_name = "req-lambda"
+stack_name = "ts-sam-standalone"
 
 [default.build.parameters]
 cached = true
